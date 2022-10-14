@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class LetterOfAttorney extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['companie_id','description'];
+
+    public function companie()
+    {
+        return $this->belongsTo(Companie::class);
+    }
 }

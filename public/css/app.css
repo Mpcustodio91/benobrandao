@@ -1327,6 +1327,9 @@ select {
 .mr-1 {
   margin-right: 0.25rem;
 }
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
 .block {
   display: block;
 }
@@ -1374,6 +1377,9 @@ select {
 }
 .h-20 {
   height: 5rem;
+}
+.h-36 {
+  height: 9rem;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -1443,6 +1449,9 @@ select {
 }
 .shrink-0 {
   flex-shrink: 0;
+}
+.border-collapse {
+  border-collapse: collapse;
 }
 .origin-top-left {
   transform-origin: top left;
@@ -1787,6 +1796,9 @@ select {
 }
 .pt-8 {
   padding-top: 2rem;
+}
+.pb-2 {
+  padding-bottom: 0.5rem;
 }
 .text-left {
   text-align: left;

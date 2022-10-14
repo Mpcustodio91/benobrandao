@@ -3,8 +3,9 @@
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CompanieController;
 use App\Http\Controllers\ContractController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LetterOfAttorneyController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,15 +19,15 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/',[DashboardController::class,'index'])->name('welcome');
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
 
 Route::middleware([
     'auth:sanctum',
@@ -38,7 +39,13 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::resource('clients',ClientController::class)->middleware(['auth:sanctum','verified']);
+Route::resource('clients',ClientController::class);
+Route::post('/clients/validation',[ClientController::class,'validation']);
+Route::post('/clients/bank-save/{id}',[ClientController::class,'addBank']);
+Route::post('/clients/crypto-save/{id}',[ClientController::class,'addCrypto']);
 Route::resource('contracts',ContractController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('companies',CompanieController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('letter-of-attorneys',LetterOfAttorneyController::class)->middleware(['auth:sanctum','verified']);
+
+Route::get('/pdf/letter-of-attorney/{id}/{pdf}',[PDFController::class,'letterOfAttorney']);
+Route::get('/pdf/contract/{id}/{pdf}/{download}',[PDFController::class,'contract']);

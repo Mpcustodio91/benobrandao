@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Companie;
+use App\Models\LetterOfAttorney;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class LetterOfAttorneyController extends Controller
 {
@@ -13,7 +16,9 @@ class LetterOfAttorneyController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('LetterOfAttorney/Index',[
+            'letter' => LetterOfAttorney::with('companie')->paginate(10)
+        ]);
     }
 
     /**
@@ -23,7 +28,9 @@ class LetterOfAttorneyController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('LetterOfAttorney/Create',[
+            'data' => Companie::all()
+        ]);
     }
 
     /**
@@ -34,20 +41,11 @@ class LetterOfAttorneyController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        LetterOfAttorney::create($request->all());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()->route('letter-of-attorneys.index');
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -56,7 +54,10 @@ class LetterOfAttorneyController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Inertia::render('LetterOfAttorney/Edit',[
+            'data' => Companie::all(),
+            'letter' => LetterOfAttorney::with('companie')->where('id',$id)->first()
+        ]);
     }
 
     /**
@@ -68,7 +69,10 @@ class LetterOfAttorneyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contract = LetterOfAttorney::findOrFail($id);
+        $contract->update(['description' => $request->description]);
+
+        return redirect()->route('letter-of-attorneys.index')->with(['message' => 'Editado com sucesso']);
     }
 
     /**

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Companie;
+use App\Models\Contract;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ContractController extends Controller
 {
@@ -13,7 +16,9 @@ class ContractController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Contract/Index',[
+            'contracts' => Contract::with('companie')->paginate(10)
+        ]);
     }
 
     /**
@@ -23,7 +28,9 @@ class ContractController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Contract/Create',[
+            'data' => Companie::all()
+        ]);
     }
 
     /**
@@ -33,21 +40,12 @@ class ContractController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
+    {        
+        Contract::create($request->all());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()->route('contracts.index');
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -56,7 +54,10 @@ class ContractController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Inertia::render('Contract/Edit',[
+            'data' => Companie::all(),
+            'contract' => Contract::with('companie')->where('id',$id)->first()
+        ]);
     }
 
     /**
@@ -68,7 +69,10 @@ class ContractController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $contract = Contract::findOrFail($id);
+        $contract->update(['description' => $request->description]);
+
+        return redirect()->route('contracts.index')->with(['message' => 'Editado com sucesso']);
     }
 
     /**

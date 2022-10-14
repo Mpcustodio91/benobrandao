@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware(['auth:sanctum','verified'])->except(['validation','update','addBank']);
+    }
     public function index()
     {
         //
@@ -68,7 +70,10 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $client = Client::findOrFail($id);        
+        $client->update($request->all());
+
+        return response()->json(['succes' => 'atualizado com sucesso'], 200);
     }
 
     /**
@@ -80,5 +85,41 @@ class ClientController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addBank(Request $request, $id)
+    {
+        $client = Client::findOrFail($id);
+        if(isset($request->fileBank)){
+            $fileName = hash('sha256',time()).'.'.$request->fileBank->extension();
+            $request['file'] = $fileName;
+            $request->fileBank->storeAs('DocsBanks',$fileName,'public');
+        }
+        $client->transfBank()->create([
+            'date'  => $request->bankDate,
+            'value' => $request->value,
+            'file'  => $request->file
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function addCrypto(Request $request, $id)
+    {
+        $client = Client::findOrFail($id);        
+        $client->transfCrypto()->create([
+            'date'      => $request->criptoDate,
+            'type'      => $request->type,
+            'quantity'  => $request->quantity,
+            'hash'      => $request->hash
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function validation(Request $request)
+    {        
+        $client = Client::firstOrCreate(['email' =>$request->email]);
+        return response()->json(['data' => $client->id],200);
     }
 }

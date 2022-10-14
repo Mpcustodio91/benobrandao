@@ -95,8 +95,7 @@ class CompanieController extends Controller
         if(isset($request->file)){
             $fileName = hash('sha256',time()).'.'.$request->file->extension();
             $request['image'] = $fileName;
-            $request->file->storeAs('ImgesCompanies',$fileName,'public');
-            dd('tem arquivo');
+            $request->file->storeAs('ImgesCompanies',$fileName,'public');            
             Storage::delete("ImgesCompanies/{$companie->iamge}");
         }
         
