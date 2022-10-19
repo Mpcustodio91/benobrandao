@@ -5,6 +5,7 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import BootstrapVue3 from 'bootstrap-vue-3';
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import VueTheMask from 'vue-the-mask';
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
@@ -19,6 +20,7 @@ createInertiaApp({
             .use(plugin)
             .use(BootstrapVue3)
             .use(CKEditor)
+            .use(VueTheMask)
             .mixin({ methods: { route } })
             .mount(el);
     },

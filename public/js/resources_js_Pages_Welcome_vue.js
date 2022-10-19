@@ -32,6 +32,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      options: [{
+        value: null,
+        text: 'Selecione uma opção'
+      }],
       currentTabIndex: 0,
       hideButtons: true,
       bank: false,
@@ -65,6 +69,14 @@ __webpack_require__.r(__webpack_exports__);
         quantity: '',
         hash: '',
         fileBank: '',
+        method_payment: '',
+        cardnumber: "",
+        holder_name: '',
+        exp_month: '',
+        exp_year: '',
+        cvv: '',
+        installments: null,
+        installmentsoptions: '',
         banks: (0,vue__WEBPACK_IMPORTED_MODULE_4__.reactive)([]),
         cryptos: (0,vue__WEBPACK_IMPORTED_MODULE_4__.reactive)([])
       })
@@ -74,7 +86,8 @@ __webpack_require__.r(__webpack_exports__);
     onChangeCurrentTab: function onChangeCurrentTab(index, oldIndex) {
       var _this = this;
 
-      this.currentTabIndex = 3;
+      this.currentTabIndex = 4;
+      console.log(this.form);
 
       if (this.form.email) {
         if (this.step == false) {
@@ -88,9 +101,18 @@ __webpack_require__.r(__webpack_exports__);
       if (this.form.id) {
         axios__WEBPACK_IMPORTED_MODULE_3___default().patch("/clients/".concat(this.form.id), this.form).then(function (result) {});
       }
+
+      if (this.currentTabIndex == 4) {
+        this.hideButtons = true;
+        axios__WEBPACK_IMPORTED_MODULE_3___default().post('/clients/values', this.form).then(function (result) {
+          var data = result.data.data;
+          _this.form.installmentsoptions = data;
+        });
+      }
     },
     onTabBeforeChange: function onTabBeforeChange() {},
-    wizardCompleted: function wizardCompleted() {// this.form.post("/clients");
+    wizardCompleted: function wizardCompleted() {
+      this.form.post('/clients/payment');
     },
     addBank: function addBank() {
       var _this2 = this;
@@ -153,6 +175,10 @@ __webpack_require__.r(__webpack_exports__);
     validEmail: function validEmail(email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
+    },
+    paymentMethod: function paymentMethod() {},
+    debug: function debug() {
+      this.form.post('/clients/payment');
     }
   },
   computed: {
@@ -167,6 +193,31 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return null;
+    },
+    parcelas: function parcelas() {
+      if (this.form.installmentsoptions) {
+        this.options.push({
+          value: 1,
+          text: "1x ".concat(this.form.installmentsoptions.toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL'
+          }))
+        });
+        this.options.push({
+          value: 2,
+          text: "2x ".concat((parseInt(this.form.installmentsoptions) / 2).toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL'
+          }))
+        });
+        this.options.push({
+          value: 3,
+          text: "3x ".concat((parseInt(this.form.installmentsoptions) / 3).toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL'
+          }))
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -294,7 +345,7 @@ var _hoisted_25 = /*#__PURE__*/_withScopeId(function () {
 var _hoisted_26 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("X");
 
 var _hoisted_27 = {
-  key: 0
+  key: 3
 };
 
 var _hoisted_28 = /*#__PURE__*/_withScopeId(function () {
@@ -333,7 +384,47 @@ var _hoisted_33 = /*#__PURE__*/_withScopeId(function () {
   );
 });
 
-var _hoisted_34 = ["src"];
+var _hoisted_34 = ["href"];
+var _hoisted_35 = ["src"];
+var _hoisted_36 = {
+  key: 4
+};
+
+var _hoisted_37 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+    "class": "alert-heading"
+  }, "Pagamento", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("PIX");
+
+var _hoisted_39 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Cartão de Crédito");
+
+var _hoisted_40 = {
+  key: 0
+};
+
+var _hoisted_41 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "Pix", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_42 = {
+  key: 1
+};
+
+var _hoisted_43 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "Cartão de Crédito", -1
+  /* HOISTED */
+  );
+});
+
+var _hoisted_44 = {
+  key: 0
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _this = this;
 
@@ -345,6 +436,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_b_form_select = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-form-select");
 
+  var _component_b_card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-card");
+
   var _component_b_col = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-col");
 
   var _component_b_row = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-row");
@@ -353,13 +446,17 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   var _component_b_card_text = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-card-text");
 
-  var _component_b_card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-card");
-
   var _component_b_alert = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-alert");
+
+  var _component_b_form_radio = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-form-radio");
+
+  var _component_b_form_radio_group = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-form-radio-group");
 
   var _component_b_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("b-form");
 
   var _component_Wizard = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Wizard");
+
+  var _directive_mask = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("mask");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("main", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Wizard, {
     "squared-tabs": "",
@@ -385,6 +482,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       title: 'Transferencias'
     }, {
       title: 'Assinatura'
+    }, {
+      title: 'Pagamento'
     }],
     beforeChange: $options.onTabBeforeChange,
     onChange: $options.onChangeCurrentTab,
@@ -393,9 +492,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form, null, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
+          return [$data.currentTabIndex === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-              return [$data.currentTabIndex === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
                 id: "input-group-1",
                 label: "E-mail:",
                 "label-for": "input-1"
@@ -447,7 +546,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 1
                 /* STABLE */
 
-              })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+              })];
+            }),
+            _: 1
+            /* STABLE */
+
+          })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
                 label: "Nome Completo:"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -481,7 +587,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
                               return $data.form.rg = $event;
                             }),
-                            type: "text",
+                            type: "number",
                             placeholder: "000000000",
                             required: ""
                           }, null, 8
@@ -504,7 +610,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         label: "CPF:"
                       }, {
                         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
                             modelValue: $data.form.cpf,
                             "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
                               return $data.form.cpf = $event;
@@ -514,7 +620,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                             required: ""
                           }, null, 8
                           /* PROPS */
-                          , ["modelValue"])];
+                          , ["modelValue"]), [[_directive_mask, '###.###.###-##']])];
                         }),
                         _: 1
                         /* STABLE */
@@ -534,10 +640,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
-                    label: "Telefone / Celular:"
+                    label: "Celular:"
                   }, {
                     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
                         modelValue: $data.form.phone,
                         "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
                           return $data.form.phone = $event;
@@ -547,7 +653,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                         required: ""
                       }, null, 8
                       /* PROPS */
-                      , ["modelValue"])];
+                      , ["modelValue"]), [[_directive_mask, '(##) #####-####']])];
                     }),
                     _: 1
                     /* STABLE */
@@ -567,7 +673,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                       return $data.form.zip_code = $event;
                     }),
                     "lazy-formatter": "",
-                    type: "text",
+                    type: "number",
                     formatter: $options.consultCep(),
                     required: ""
                   }, null, 8
@@ -760,7 +866,14 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 _: 1
                 /* STABLE */
 
-              })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_button, {
+              })];
+            }),
+            _: 1
+            /* STABLE */
+
+          })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 2 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_button, {
                 variant: "success",
                 onClick: _cache[13] || (_cache[13] = function ($event) {
                   return $data.bank = true;
@@ -1109,12 +1222,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 , ["onClick"])])]);
               }), 128
               /* KEYED_FRAGMENT */
-              ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+              ))])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
             }),
             _: 1
             /* STABLE */
 
-          }), $data.currentTabIndex === 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
+          })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 3 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
             "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
               return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card_text, null, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
@@ -1166,7 +1279,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                 variant: "success"
               }, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-                  return [_hoisted_33];
+                  return [_hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+                    href: "/pdf/contract/".concat($data.form.id, "/").concat($data.form.company, "/1"),
+                    "class": "btn btn-sm btn-primary"
+                  }, "Download", 8
+                  /* PROPS */
+                  , _hoisted_34)])];
                 }),
                 _: 1
                 /* STABLE */
@@ -1174,13 +1292,270 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
               }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, null, {
                 "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
                   return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("iframe", {
-                    src: "/pdf/contract/".concat($data.form.id, "/").concat($data.form.company),
+                    src: "/pdf/contract/".concat($data.form.id, "/").concat($data.form.company, "/2"),
                     width: "100vh",
                     height: "500px",
                     frameborder: "0"
                   }, null, 8
                   /* PROPS */
-                  , _hoisted_34)];
+                  , _hoisted_35)];
+                }),
+                _: 1
+                /* STABLE */
+
+              })];
+            }),
+            _: 1
+            /* STABLE */
+
+          })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.currentTabIndex === 4 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_36, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card, null, {
+            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_card_text, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [_hoisted_37];
+                }),
+                _: 1
+                /* STABLE */
+
+              }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, null, {
+                "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                  return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                    label: "Selecione o metodo de pagamento"
+                  }, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function (_ref) {
+                      var ariaDescribedby = _ref.ariaDescribedby;
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_radio_group, {
+                        id: "radio-group-2",
+                        modelValue: $data.form.method_payment,
+                        "onUpdate:modelValue": _cache[24] || (_cache[24] = function ($event) {
+                          return $data.form.method_payment = $event;
+                        }),
+                        "aria-describedby": ariaDescribedby,
+                        name: "radio-sub-component",
+                        onClick: $options.paymentMethod
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_radio, {
+                            value: "pix"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [_hoisted_38];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_radio, {
+                            value: "credit_card",
+                            state: $options.parcelas
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [_hoisted_39];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          }, 8
+                          /* PROPS */
+                          , ["state"])];
+                        }),
+                        _: 2
+                        /* DYNAMIC */
+
+                      }, 1032
+                      /* PROPS, DYNAMIC_SLOTS */
+                      , ["modelValue", "aria-describedby", "onClick"])];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  }), $data.form.method_payment == 'pix' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_40, [_hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "Ao clicar em finalizar será gerado um QRCode com o valor de " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_this.form.installmentsoptions.toLocaleString('pt-br', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  })), 1
+                  /* TEXT */
+                  )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.form.method_payment == 'credit_card' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_42, [_hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, null, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "6"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "Numero de parcelas:"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_select, {
+                                modelValue: $data.form.installments,
+                                "onUpdate:modelValue": _cache[25] || (_cache[25] = function ($event) {
+                                  return $data.form.installments = $event;
+                                }),
+                                options: $data.options
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue", "options"])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      })];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  }), $data.form.installments ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, null, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "6"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "Nome no Cartão:"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                                modelValue: $data.form.holder_name,
+                                "onUpdate:modelValue": _cache[26] || (_cache[26] = function ($event) {
+                                  return $data.form.holder_name = $event;
+                                }),
+                                type: "text",
+                                required: ""
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue"])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "6"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "Numero do Cartão:"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                                modelValue: $data.form.cardnumber,
+                                "onUpdate:modelValue": _cache[27] || (_cache[27] = function ($event) {
+                                  return $data.form.cardnumber = $event;
+                                }),
+                                type: "text",
+                                required: ""
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue"]), [[_directive_mask, '####-####-####-####']])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      })];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_row, null, {
+                    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "4"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "Mês de expiração:"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                                modelValue: $data.form.exp_month,
+                                "onUpdate:modelValue": _cache[28] || (_cache[28] = function ($event) {
+                                  return $data.form.exp_month = $event;
+                                }),
+                                type: "text",
+                                required: ""
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue"]), [[_directive_mask, '##']])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "4"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "Ano de expiração: (ex:2022)"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                                modelValue: $data.form.exp_year,
+                                "onUpdate:modelValue": _cache[29] || (_cache[29] = function ($event) {
+                                  return $data.form.exp_year = $event;
+                                }),
+                                type: "text",
+                                required: ""
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue"]), [[_directive_mask, '####']])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_col, {
+                        lg: "4"
+                      }, {
+                        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                          return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_group, {
+                            label: "CVV:"
+                          }, {
+                            "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+                              return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_b_form_input, {
+                                modelValue: _this.form.cvv,
+                                "onUpdate:modelValue": _cache[30] || (_cache[30] = function ($event) {
+                                  return _this.form.cvv = $event;
+                                }),
+                                type: "text",
+                                required: ""
+                              }, null, 8
+                              /* PROPS */
+                              , ["modelValue"]), [[_directive_mask, '###']])];
+                            }),
+                            _: 1
+                            /* STABLE */
+
+                          })];
+                        }),
+                        _: 1
+                        /* STABLE */
+
+                      })];
+                    }),
+                    _: 1
+                    /* STABLE */
+
+                  })])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
                 }),
                 _: 1
                 /* STABLE */

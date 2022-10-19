@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => function () {
                 return (new Ziggy)->toArray();
             },
+            'message' => fn () => $request->session()->get('message')
         ]);
     }
 }

@@ -39,10 +39,16 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::get('/success',function(){
+    return Inertia::render('Success');
+})->name('success');
+
 Route::resource('clients',ClientController::class);
 Route::post('/clients/validation',[ClientController::class,'validation']);
 Route::post('/clients/bank-save/{id}',[ClientController::class,'addBank']);
 Route::post('/clients/crypto-save/{id}',[ClientController::class,'addCrypto']);
+Route::post('/clients/payment',[ClientController::class,'payment']);
+Route::post('/clients/values',[ClientController::class,'values']);
 Route::resource('contracts',ContractController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('companies',CompanieController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('letter-of-attorneys',LetterOfAttorneyController::class)->middleware(['auth:sanctum','verified']);
