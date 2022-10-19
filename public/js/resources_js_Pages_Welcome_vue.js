@@ -86,7 +86,7 @@ __webpack_require__.r(__webpack_exports__);
     onChangeCurrentTab: function onChangeCurrentTab(index, oldIndex) {
       var _this = this;
 
-      this.currentTabIndex = 4;
+      this.currentTabIndex = index;
       console.log(this.form);
 
       if (this.form.email) {

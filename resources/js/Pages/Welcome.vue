@@ -424,7 +424,7 @@ export default {
   },
   methods: {
     onChangeCurrentTab(index, oldIndex) {
-      this.currentTabIndex = 4;      
+      this.currentTabIndex = index;      
       console.log(this.form);
       if (this.form.email) {
         if (this.step == false) {
