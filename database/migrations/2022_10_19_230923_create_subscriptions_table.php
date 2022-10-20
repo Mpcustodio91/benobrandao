@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bank_transfers', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('client_id')->constrained('clients')->cascadeOnDelete()->nullable();
-            $table->date('date')->nullable();
-            $table->string('value')->nullable();
-            $table->string('file')->nullable();
+            $table->longText('letter')->nullable();
+            $table->longText('contract')->nullable();
+            $table->string('ipaddress')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bank_transfers');
+        Schema::dropIfExists('subscriptions');
     }
 };

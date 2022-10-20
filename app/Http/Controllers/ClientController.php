@@ -73,7 +73,9 @@ class ClientController extends Controller
     {
         $client = Client::findOrFail($id);
         $client->update($request->all());
-
+        if(isset($request->ipaddress)){
+            $client->contrato == null ? $client->contrato()->create(['ipaddress' => $request->ipaddress]) : $client->contrato()->update(['ipaddress' => $request->ipaddress]);
+        }
         return response()->json(['succes' => 'atualizado com sucesso'], 200);
     }
 
@@ -130,6 +132,7 @@ class ClientController extends Controller
         if($request->method_payment == 'credit_card'){
             $dados = $this->creditCard($request->id);
             $numberCard = str_replace("-", "", $request->cardnumber);
+            $dados['payments'][0]['credit_card']['installments'] = $request->installments;
             $dados['payments'][0]['credit_card']['card']['number'] = $numberCard;
             $dados['payments'][0]['credit_card']['card']['holder_name'] = $request->holder_name;
             $dados['payments'][0]['credit_card']['card']['exp_month'] = $request->exp_month;
@@ -281,8 +284,7 @@ class ClientController extends Controller
     }
 
     public function values(Request $request)
-    {
-        // dd($request->all());
+    {        
         $client = Client::with('transfBank','transfCrypto')->where('id', 3)->first();
         $value = $client->transfBank->sum('value') + $client->transfCrypto->sum('quantity');
         switch ($value) {

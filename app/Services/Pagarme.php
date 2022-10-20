@@ -18,10 +18,10 @@ class Pagarme
     }    
 
     public function pix($dados)
-    {
+    {        
         $auth = Http::accept('application/json')->withHeaders([            
             'authorization' => 'Basic c2tfdGVzdF9QVlFKdnFNaVh5VEdhTmxtOg=='
-        ])->post('https://api.pagar.me/core/v5/orders',$dados); 
+        ])->post('https://api.pagar.me/core/v5/orders',$dados);     
         if(isset($auth->json()['errors'])){
             $data = ['message' => 'Erro ao processar favor entrar em contato com o escritório'];
         }

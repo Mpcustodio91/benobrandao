@@ -12,7 +12,7 @@ class PDFController extends Controller
 {
     public function contract($id = null, $pdf = null, $download = null)
     {        
-        $client = Client::where('id',$id)->first();
+        $client = Client::with('contrato')->where('id',$id)->first();
         $contract = Contract::where('companie_id',$pdf)->first();  
         $t= $contract->description;
         $name = str_replace("-name-",$client->name,$t);
@@ -26,8 +26,8 @@ class PDFController extends Controller
         $state = str_replace("-state-",$client->state,$city);
         $zip_code = str_replace("-zip_code-",$client->zip_code,$state);
         $description = $zip_code;
-        
-        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true , 'isRemoteEnabled' => true])->loadView('pdf.procuracao',['data' =>$client,'description' => $description]);            
+        $client->contrato == null ? $client->contrato()->create(['contract' => $description]) : $client->contrato()->update(['contract' => $description]);
+        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true , 'isRemoteEnabled' => true])->loadView('pdf.contrato',['data' =>$client,'description' => $description]);            
         if($download == 1){
             return $pdf->download('contrato -'.$client->name.'.pdf');
         }else{
@@ -52,8 +52,9 @@ class PDFController extends Controller
         $state = str_replace("-state-",$client->state,$city);
         $zip_code = str_replace("-zip_code-",$client->zip_code,$state);
         $description = $zip_code;
-
-        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true , 'isRemoteEnabled' => true])->loadView('pdf.contrato',['data' =>$client,'description' => $description])->stream('procuração - '.$client->name.'.pdf');
+        // dd($client->subscription);
+        $client->contrato == null ? $client->contrato()->create(['letter' => $description]) : $client->contrato()->update(['letter' => $description]);
+        $pdf = Pdf::setOptions(['isHtml5ParserEnabled' => true , 'isRemoteEnabled' => true])->loadView('pdf.procuracao',['data' =>$client,'description' => $description])->stream('procuração - '.$client->name.'.pdf');
         return $pdf;
     }
 }

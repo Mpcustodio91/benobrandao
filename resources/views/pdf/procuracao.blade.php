@@ -69,12 +69,12 @@
         <tbody>
             <tr>
                 <td style="width: 25%;">&nbsp;</td>
-                <td style="width: 50%; text-align: center; border-bottom: 3px solid;" class="assinatura"></td>
+                <td style="width: 80%; text-align: center; border-bottom: 3px solid;" class="assinatura">{{$data->name}}</td>
                 <td style="width: 25%;">&nbsp;</td>
             </tr>
             <tr style="margin-top: 90px">
                 <td style="width: 25%;">&nbsp;</td>
-                <td style="width: 50%; text-align: center;">{{$data->name}}</td>
+                <td style="width: 80%; text-align: center;">{{$data->name}}</td>
                 <td style="width: 25%;">&nbsp;</td>
             </tr>
         </tbody>

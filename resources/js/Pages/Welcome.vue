@@ -17,12 +17,20 @@
           :backButton="{
            text: 'Voltar',
            icon: 'next'
-          }" :nextButton="{
+          }" 
+          :nextButton="{
             text: 'Avançar',
             icon: 'back',
             hideIcon: false, 
             hideText: false, 
-          }" :custom-tabs="[
+          }" 
+          :doneButton="{
+            text: 'Efetuar Pagamento',
+            icon: 'next',
+            hideIcon: false, 
+            hideText: false,
+          }"
+          :custom-tabs="[
             {
               title: 'Dados do Contrato',
             },
@@ -58,7 +66,7 @@
             <div v-if="currentTabIndex === 1">
               <b-card>
                 <b-form-group label="Nome Completo:">
-                  <b-form-input v-model="form.name" type="text" placeholder="Digite seu nome completo" required>
+                  <b-form-input v-model="form.name" type="text" :state="validations" placeholder="Digite seu nome completo" required>
                   </b-form-input>
                 </b-form-group>
                 <b-row>
@@ -78,7 +86,7 @@
                 </b-row>
                 <b-col lg="6">
                   <b-form-group label="Celular:">
-                    <b-form-input v-model="form.phone" type="text" v-mask="'(##) #####-####'"
+                    <b-form-input v-model="form.telefone" type="text" v-mask="'(##) #####-####'"
                       placeholder="(00) 0000-0000" required>
                     </b-form-input>
                   </b-form-group>
@@ -144,7 +152,7 @@
                   <b-row>
                     <b-col lg="6">
                       <b-form-group label="Data:">
-                        <b-form-input v-model="this.form.bankDate" type="date" required>
+                        <b-form-input v-model="this.form.bankDate" :state="validations" type="date" required>
                         </b-form-input>
                       </b-form-group>
                     </b-col>
@@ -199,7 +207,7 @@
                   <b-row>
                     <b-col lg="3">
                       <b-form-group label="Data:">
-                        <b-form-input v-model="form.criptoDate" type="date" required>
+                        <b-form-input v-model="form.criptoDate" type="date" :state="validations" required>
                         </b-form-input>
                       </b-form-group>
                     </b-col>
@@ -365,7 +373,8 @@ import { useForm } from '@inertiajs/inertia-vue3'
 import axios from 'axios';
 import { reactive } from 'vue';
 import moment from 'moment'
-
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from 'vuelidate/lib/validators'
 export default {
   name: 'Welcome',
   components: {
@@ -373,6 +382,7 @@ export default {
   },
   data() {
     return {
+      v$: useVuelidate(),
       options: [
         { value: null, text: 'Selecione uma opção' },        
       ],
@@ -394,7 +404,7 @@ export default {
         name: '',
         rg: '',
         cpf: '',
-        phone: '',
+        telefone: '',
         zip_code: '',
         address: '',
         number: '',
@@ -417,15 +427,29 @@ export default {
         cvv:'',
         installments:null,
         installmentsoptions: '',
+        ipaddress:'',
         banks: reactive([]),
         cryptos: reactive([]),
       })
     };
   },
+  validations() {
+    return {
+      form: {
+        name: { required },
+        rg: { required },
+        cpf: { required },
+        telefone: { required },
+        address: { required },
+        district: { required },
+        city: { required },
+        state: { required }        
+      },
+    }
+  },
   methods: {
     onChangeCurrentTab(index, oldIndex) {
-      this.currentTabIndex = index;      
-      console.log(this.form);
+      this.currentTabIndex = index;
       if (this.form.email) {
         if (this.step == false) {
           axios.post('/clients/validation', this.form)
@@ -444,8 +468,7 @@ export default {
         axios.post('/clients/values', this.form)
           .then((result) => {
             let data = result.data.data
-            this.form.installmentsoptions = data
-            
+            this.form.installmentsoptions = data            
           })        
       }
     },
@@ -509,10 +532,7 @@ export default {
     },
     paymentMethod() {
 
-    },    
-    debug() {
-      this.form.post('/clients/payment')
-    }
+    },
   },
   computed: {
     validations() {
@@ -524,10 +544,30 @@ export default {
           return true
         }
       }
+      if(this.currentTabIndex == 1){
+        this.hideButtons = true
+        this.v$.$validate()
+        if (!this.v$.$error) {
+          this.hideButtons = false
+        }
+      }
+      if(this.currentTabIndex == 2){
+        this.hideButtons = true
+        if(this.form.banks.length > 0 || this.form.cryptos.length > 0){
+          this.hideButtons = false
+        }
+      }
+      if(this.form.ipaddress == ''){
+        fetch('https://api.ipify.org?format=json')
+        .then(x => x.json())
+        .then(({ ip }) => {
+            this.form.ipaddress = ip
+        });
+      }
       return null
     },
     parcelas(){
-      if(this.form.installmentsoptions){
+      if(this.form.installmentsoptions && this.options.length <= 3){
         this.options.push({
           value: 1,
           text: `1x ${this.form.installmentsoptions.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}`
@@ -541,6 +581,21 @@ export default {
           text: `3x ${(parseInt(this.form.installmentsoptions) / 3).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}`
         })
       }
+      if(this.form.method_payment == 'pix'){
+        this.hideButtons = false
+      }
+      if(this.form.method_payment == 'credit_card'){
+        this.hideButtons = true
+        if(this.form.method_payment != '' &&
+          this.form.cardnumber != '' &&
+          this.form.holder_name != '' &&
+          this.form.exp_month != '' &&
+          this.form.exp_year != '' &&
+          this.form.cvv != '' ){
+          this.hideButtons = false
+        }       
+        
+      }
     },
   },
   mounted() {
@@ -549,7 +604,7 @@ export default {
         value: item.id,
         text: item.name
       })
-    })
+    })    
   },
   props: {
     data: Object

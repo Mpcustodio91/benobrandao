@@ -37,4 +37,9 @@ class Client extends Model
     {
         return $this->hasMany(CryptoTransfer::class);
     }
+
+    public function contrato()
+    {
+        return $this->hasOne(Subscription::class);
+    }
 }
