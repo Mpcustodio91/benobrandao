@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankTransfer;
 use App\Models\Client;
 use App\Services\Pagarme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
@@ -16,7 +18,9 @@ class ClientController extends Controller
     }
     public function index()
     {
-        //
+        return Inertia::render('Client/Index',[
+            'clients' => Client::orderBy('name')->paginate(10)
+        ]);
     }
 
     /**
@@ -37,7 +41,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        
     }
 
     /**
@@ -48,7 +52,9 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        //
+        return Inertia::render('Client/Show',[
+            'client' => Client::with('transfBank','transfCrypto','contrato')->where('id',$id)->first()
+        ]);
     }
 
     /**
@@ -77,17 +83,6 @@ class ClientController extends Controller
             $client->contrato == null ? $client->contrato()->create(['ipaddress' => $request->ipaddress]) : $client->contrato()->update(['ipaddress' => $request->ipaddress]);
         }
         return response()->json(['succes' => 'atualizado com sucesso'], 200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function addBank(Request $request, $id)

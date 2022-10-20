@@ -49,6 +49,7 @@ Route::post('/clients/bank-save/{id}',[ClientController::class,'addBank']);
 Route::post('/clients/crypto-save/{id}',[ClientController::class,'addCrypto']);
 Route::post('/clients/payment',[ClientController::class,'payment']);
 Route::post('/clients/values',[ClientController::class,'values']);
+Route::get('/clients/download-file/{id}',[ClientController::class,'downloadFile']);
 Route::resource('contracts',ContractController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('companies',CompanieController::class)->middleware(['auth:sanctum','verified']);
 Route::resource('letter-of-attorneys',LetterOfAttorneyController::class)->middleware(['auth:sanctum','verified']);

@@ -90,7 +90,7 @@ export default defineComponent({
                       <td>{{ client.status }}</td>
                       <td>
                         <div class="btn-group btn-group-sm">
-                          <Link :href="`/clients/${client.id}/edit`" type="button" class="btn btn-primary">
+                          <Link :href="`/clients/${client.id}`" type="button" class="btn btn-primary">
                             <i class="fas fa-edit"></i>
                           </Link>
                         </div>
