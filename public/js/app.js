@@ -60971,6 +60971,18 @@ var map = {
 		"./resources/js/Pages/Auth/VerifyEmail.vue",
 		"resources_js_Pages_Auth_VerifyEmail_vue"
 	],
+	"./Client/Create.vue": [
+		"./resources/js/Pages/Client/Create.vue",
+		"resources_js_Pages_Client_Create_vue"
+	],
+	"./Client/Edit.vue": [
+		"./resources/js/Pages/Client/Edit.vue",
+		"resources_js_Pages_Client_Edit_vue"
+	],
+	"./Client/Index.vue": [
+		"./resources/js/Pages/Client/Index.vue",
+		"resources_js_Pages_Client_Index_vue"
+	],
 	"./Companie/Create.vue": [
 		"./resources/js/Pages/Companie/Create.vue",
 		"resources_js_Pages_Companie_Create_vue"
@@ -61200,7 +61212,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_Pages_API_Index_vue":1,"resources_js_Pages_API_Partials_ApiTokenManager_vue":1,"resources_js_Pages_Auth_ConfirmPassword_vue":1,"resources_js_Pages_Auth_ForgotPassword_vue":1,"resources_js_Pages_Auth_Login_vue":1,"resources_js_Pages_Auth_Register_vue":1,"resources_js_Pages_Auth_ResetPassword_vue":1,"resources_js_Pages_Auth_TwoFactorChallenge_vue":1,"resources_js_Pages_Auth_VerifyEmail_vue":1,"resources_js_Pages_Companie_Create_vue":1,"resources_js_Pages_Companie_Edit_vue":1,"resources_js_Pages_Companie_Index_vue":1,"resources_js_Pages_Contract_Create_vue":1,"resources_js_Pages_Contract_Edit_vue":1,"resources_js_Pages_Contract_Index_vue":1,"resources_js_Pages_Dashboard_vue":1,"resources_js_Pages_LetterOfAttorney_Create_vue":1,"resources_js_Pages_LetterOfAttorney_Edit_vue":1,"resources_js_Pages_LetterOfAttorney_Index_vue":1,"resources_js_Pages_PrivacyPolicy_vue":1,"resources_js_Pages_Profile_Partials_DeleteUserForm_vue":1,"resources_js_Pages_Profile_Partials_LogoutOtherBrowserSessionsForm_vue":1,"resources_js_Pages_Profile_Partials_TwoFactorAuthenticationForm_vue":1,"resources_js_Pages_Profile_Partials_UpdatePasswordForm_vue":1,"resources_js_Pages_Profile_Partials_UpdateProfileInformationForm_vue":1,"resources_js_Pages_Profile_Show_vue":1,"resources_js_Pages_Success_vue":1,"resources_js_Pages_TermsOfService_vue":1,"resources_js_Pages_Welcome_vue":1}[chunkId]) return "js/" + chunkId + ".js";
+/******/ 			if ({"resources_js_Pages_API_Index_vue":1,"resources_js_Pages_API_Partials_ApiTokenManager_vue":1,"resources_js_Pages_Auth_ConfirmPassword_vue":1,"resources_js_Pages_Auth_ForgotPassword_vue":1,"resources_js_Pages_Auth_Login_vue":1,"resources_js_Pages_Auth_Register_vue":1,"resources_js_Pages_Auth_ResetPassword_vue":1,"resources_js_Pages_Auth_TwoFactorChallenge_vue":1,"resources_js_Pages_Auth_VerifyEmail_vue":1,"resources_js_Pages_Client_Create_vue":1,"resources_js_Pages_Client_Edit_vue":1,"resources_js_Pages_Client_Index_vue":1,"resources_js_Pages_Companie_Create_vue":1,"resources_js_Pages_Companie_Edit_vue":1,"resources_js_Pages_Companie_Index_vue":1,"resources_js_Pages_Contract_Create_vue":1,"resources_js_Pages_Contract_Edit_vue":1,"resources_js_Pages_Contract_Index_vue":1,"resources_js_Pages_Dashboard_vue":1,"resources_js_Pages_LetterOfAttorney_Create_vue":1,"resources_js_Pages_LetterOfAttorney_Edit_vue":1,"resources_js_Pages_LetterOfAttorney_Index_vue":1,"resources_js_Pages_PrivacyPolicy_vue":1,"resources_js_Pages_Profile_Partials_DeleteUserForm_vue":1,"resources_js_Pages_Profile_Partials_LogoutOtherBrowserSessionsForm_vue":1,"resources_js_Pages_Profile_Partials_TwoFactorAuthenticationForm_vue":1,"resources_js_Pages_Profile_Partials_UpdatePasswordForm_vue":1,"resources_js_Pages_Profile_Partials_UpdateProfileInformationForm_vue":1,"resources_js_Pages_Profile_Show_vue":1,"resources_js_Pages_Success_vue":1,"resources_js_Pages_TermsOfService_vue":1,"resources_js_Pages_Welcome_vue":1}[chunkId]) return "js/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
